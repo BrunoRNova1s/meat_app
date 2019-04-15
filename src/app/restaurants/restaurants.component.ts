@@ -17,7 +17,7 @@ export class RestaurantsComponent implements OnInit {
     this.restaurantsService.restaurants()
       .subscribe(restaurants => {
         this.restaurants = restaurants;
-        console.log('-----data-----', restaurants)
+        console.log('-----data RESTAURANTES-----', restaurants)
       })
   }
 }
