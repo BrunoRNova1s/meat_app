@@ -8,7 +8,9 @@ import {
 } from "@angular/animations";
 import { NotificationService } from "../notification.service";
 import { Observable } from "rxjs/Observable";
-import 'rxjs/add/observable/timer'
+import "rxjs/add/observable/timer";
+import 'rxjs/add/operator/do'
+import 'rxjs/add/operator/switchMap'
 
 @Component({
   selector: "mt-snackbar",
@@ -36,19 +38,25 @@ import 'rxjs/add/observable/timer'
   ]
 })
 export class SnackbarComponent implements OnInit {
-  message: string = "Hello ppl";
+  message: string 
 
   snackVisibility: string = "hidden";
 
   constructor(private notificationService: NotificationService) {}
 
+  /* 
+  do -  permite fazer uma ação com a mensagem que chegou naquele momento
+  subscribe - coloca um listner no observable 
+                e só a partir desse ponto é que o observable vai notificar 
+  */
+
   ngOnInit() {
-    this.notificationService.notifier.subscribe(message => {
-      this.message = message;
-      this.snackVisibility = "visible";
-      Observable.timer(3000).subscribe(
-        timer => (this.snackVisibility = "hidden")
-      );
-    });
-  }
+    this.notificationService.notifier
+      .do(message => {
+        this.message = message;
+        this.snackVisibility = 'visible';
+      })
+      .switchMap(message => Observable.timer(3000))
+      .subscribe(timer => this.snackVisibility = 'hidden')
+  }  
 }
