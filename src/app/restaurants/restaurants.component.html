@@ -3,7 +3,7 @@
   <h1>
     Todos os Restaurantes
     <a (click)="toggleSearch()" class="search-link pull-right"
-      ><i class="fa fa-search"></i
+      ><span *ngIf="iptSearch.value">{{iptSearch.value}}</span><i class="fa fa-search"></i
     ></a>
   </h1>
 
@@ -13,6 +13,7 @@
       <form [formGroup]="searchForm">
         <div class="form-group">
           <input
+            #iptSearch
             type="text"
             class="form-control"
             formControlName="searchControl"

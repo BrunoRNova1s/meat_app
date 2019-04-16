@@ -13,6 +13,9 @@ import {
 import { FormBuilder, FormGroup, FormControl } from "@angular/forms";
 
 import "rxjs/add/operator/switchMap";
+import "rxjs/add/operator/do"
+import "rxjs/add/operator/debounceTime"
+import "rxjs/add/operator/distinctUntilChanged"
 
 @Component({
   selector: "mt-restaurants",
@@ -58,7 +61,13 @@ export class RestaurantsComponent implements OnInit {
     });
 
     /* saber o que é digitado | quando valor muda*/
+    /* debounce - espera que passe x tempo ate fazer o pedido ao server */
+    /* se a mensagem seguinte for igual à anterior, ele vai ignorar */
     this.searchControl.valueChanges
+      .debounceTime(500)
+      .distinctUntilChanged()
+      /* .do(searchTerm=> console.log(`q=${searchTerm}`)) */
+      /* o switchmap evita que os request se subreponham - portanto deve utilizar se */
       .switchMap(searchTerm => this.restaurantsService.restaurants(searchTerm))
       .subscribe(restaurants => (this.restaurants = restaurants));
 
