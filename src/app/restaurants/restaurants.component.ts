@@ -12,6 +12,8 @@ import {
 } from "@angular/animations";
 import { FormBuilder, FormGroup, FormControl } from "@angular/forms";
 
+import "rxjs/add/operator/switchMap";
+
 @Component({
   selector: "mt-restaurants",
   templateUrl: "./restaurants.component.html",
@@ -56,9 +58,9 @@ export class RestaurantsComponent implements OnInit {
     });
 
     /* saber o que é digitado | quando valor muda*/
-    this.searchControl.valueChanges.subscribe(searchTerm =>
-      console.log("searchTerm", searchTerm)
-    );
+    this.searchControl.valueChanges
+      .switchMap(searchTerm => this.restaurantsService.restaurants(searchTerm))
+      .subscribe(restaurants => (this.restaurants = restaurants));
 
     this.restaurantsService.restaurants().subscribe(restaurants => {
       this.restaurants = restaurants;

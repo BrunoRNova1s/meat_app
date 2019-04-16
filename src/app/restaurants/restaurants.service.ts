@@ -17,9 +17,12 @@ import { MenuItem } from "app/restaurant-detail/menu-item/menu-item.model";
 export class RestaurantsService {
   constructor(private http: Http) {}
 
-  restaurants(): Observable<Restaurant[]> {
+  /* Permitir a pesquisa (parametro search) */
+  restaurants(search?: string): Observable<Restaurant[]> {
     return this.http
-      .get(`${MEAT_API}/restaurants`)
+      .get(`${MEAT_API}/restaurants`, {
+        params: { q: search }
+      }) /* o q permite que a pesquisa seja feita em todos os elemtos | json serve permite isso */
       .map(response => response.json())
       .catch(
         ErrorHandler.handleError
