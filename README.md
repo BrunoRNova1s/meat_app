@@ -142,6 +142,12 @@ Dependências dos pacotes que devem ficar em package.json:
   }
 ```
 
+## Inside folder backend => cmd
+tsc -w
+
+## Start the server 
+nodemon --watch backend backend/dist/server.js
+
 ## Créditos
 
 Todas as imagens usadas na aplicação são pertencentes a freepik.com
