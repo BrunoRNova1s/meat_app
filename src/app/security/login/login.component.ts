@@ -27,7 +27,7 @@ export class LoginComponent implements OnInit {
       email: this.fb.control("", [Validators.required, Validators.email]),
       password: this.fb.control("", [Validators.required])
     });
-    this.navigaTo = this.activatedRoute.snapshot.params["to"] || "/";
+    this.navigaTo = this.activatedRoute.snapshot.params["to"] || btoa("/");
   }
 
   //NOTA: para receber o objecto é necessário o subscriber
@@ -40,8 +40,8 @@ export class LoginComponent implements OnInit {
         //HttpErrorResponse
         response => this.notificationService.notify(response.error.message),
         () => {
-          this.router.navigate([this.navigaTo]);
+          this.router.navigate([atob(this.navigaTo)]);
         }
-      );
+      );  
   }
 }
