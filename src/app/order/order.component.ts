@@ -8,7 +8,8 @@ import {
   FormGroup,
   FormBuilder,
   Validators,
-  AbstractControl
+  AbstractControl,
+  FormControl
 } from "@angular/forms";
 
 @Component({
@@ -38,13 +39,16 @@ export class OrderComponent implements OnInit {
     private formBuilder: FormBuilder
   ) {}
 
+  /* o campo name é validado com FormControl - 
+  neste caso a validação é feita apenas no blur
+  e não imediata como nos restantes campos */
+
   ngOnInit() {
-    this.orderForm = this.formBuilder.group(
+    this.orderForm = new FormGroup(
       {
-        name: this.formBuilder.control("", [
-          Validators.required,
-          Validators.minLength(5)
-        ]),
+        name: new FormControl("", {
+          validators: [Validators.required, Validators.minLength(5)]
+        }),
         email: this.formBuilder.control("", [
           Validators.required,
           Validators.pattern(this.emailPattern)
@@ -64,7 +68,7 @@ export class OrderComponent implements OnInit {
         optionalAddress: this.formBuilder.control(""),
         paymentOption: this.formBuilder.control("", [Validators.required])
       },
-      { validator: OrderComponent.equalsTo }
+      { validators: [OrderComponent.equalsTo], updateOn: 'blur' }
     );
   }
 
@@ -111,15 +115,16 @@ export class OrderComponent implements OnInit {
     order.orderItems = this.cartItems().map(
       (item: CartItem) => new OrderItem(item.quantity, item.menuItem.id)
     );
-    this.orderService.checkOrder(order)
+    this.orderService
+      .checkOrder(order)
       .do((orderId: string) => {
-        this.orderId = orderId
+        this.orderId = orderId;
       })
       .subscribe((orderId: string) => {
-      this.router.navigate(["/order-summary"]);
-      console.log(`Compra concluida: ${orderId}`);
-      this.orderService.clear();
-    });
+        this.router.navigate(["/order-summary"]);
+        console.log(`Compra concluida: ${orderId}`);
+        this.orderService.clear();
+      });
     console.log("|||||||| order ||||||", order);
   }
 }

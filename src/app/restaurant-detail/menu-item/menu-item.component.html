@@ -8,7 +8,7 @@
     <span class="menu-item-info-box-detail"
       >{{menuItem.discription}}</span
     >
-    <span class="menu-item-info-box-price">{{menuItem.price | currency: 'EUR' : true}}</span>
+    <span class="menu-item-info-box-price">{{menuItem.price | currency: "EUR": "symbol"}}</span>
     <a (click)="emitAddEvent()" class=""><i class="fa fa-plus-circle"></i> Adicionar</a>
   </div>
   <!-- /.info-box-content -->
