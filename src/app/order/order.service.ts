@@ -6,14 +6,12 @@ import { Observable } from "rxjs/Observable";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { MEAT_API } from "app/app.api";
 import "rxjs/add/operator/map";
-import { LoginService } from "app/security/login/login.service";
 
 @Injectable()
 export class OrderService {
   constructor(
     private cartService: ShoppingCartService,
     private http: HttpClient,
-    private loginService: LoginService
   ) {}
 
   itemsValue(): number {
@@ -42,13 +40,8 @@ export class OrderService {
 
   /* Como é uma chamada Http então utiliza-se Observable */
   checkOrder(order: Order): Observable<string> {
-    let headers = new HttpHeaders()
-    if(this.loginService.isLoggedIn()){
-      headers = headers.set('Authorization', `Bearer ${this.loginService.user.accessToken}`)
-    }
-
     return this.http
-      .post<Order>(`${MEAT_API}/orders`, order, {headers:headers})
+      .post<Order>(`${MEAT_API}/orders`, order)
       .map(order => order.id);
   }
 }
