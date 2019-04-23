@@ -11,6 +11,7 @@ import { Observable } from "rxjs/Observable";
 import "rxjs/add/observable/timer";
 import 'rxjs/add/operator/do'
 import 'rxjs/add/operator/switchMap'
+import { Message } from "@angular/compiler/src/i18n/i18n_ast";
 
 @Component({
   selector: "mt-snackbar",
