@@ -1,7 +1,7 @@
 /* Exibição de erro na consola, caso não consiga aceder aos dados do servoiço */
 
 import { HttpErrorResponse } from "@angular/common/http";
-import "rxjs/add/observable/throw";
+/* import {throwError} from 'rxjs/operators' */
 import { ErrorHandler, Injectable, Injector, NgZone } from "@angular/core";
 import { NotificationService } from "./shared/messages/notification.service";
 import { LoginService } from "./security/login/login.service";

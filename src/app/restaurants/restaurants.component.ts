@@ -12,12 +12,15 @@ import {
 } from "@angular/animations";
 import { FormBuilder, FormGroup, FormControl } from "@angular/forms";
 
-import "rxjs/add/operator/switchMap";
-import "rxjs/add/operator/do";
-import "rxjs/add/operator/debounceTime";
-import "rxjs/add/operator/distinctUntilChanged";
-import "rxjs/add/operator/catch";
-import "rxjs/add/observable/from";
+import { Observable, from } from "rxjs";
+
+import {
+  switchMap,
+  tap,
+  debounceTime,
+  distinctUntilChanged,
+  catchError
+} from "rxjs/operators";
 
 @Component({
   selector: "mt-restaurants",
@@ -66,13 +69,16 @@ export class RestaurantsComponent implements OnInit {
     /* debounce - espera que passe x tempo ate fazer o pedido ao server */
     /* se a mensagem seguinte for igual à anterior, ele vai ignorar */
     this.searchControl.valueChanges
-      .debounceTime(500)
-      .distinctUntilChanged()
-      /* .do(searchTerm=> console.log(`q=${searchTerm}`)) */
-      /* o switchmap evita que os request se subreponham - portanto deve utilizar se */
-      .switchMap(searchTerm =>
-        this.restaurantsService
-          .restaurants(searchTerm)
+      .pipe(
+        debounceTime(500),
+        distinctUntilChanged(),
+        /* .do(searchTerm=> console.log(`q=${searchTerm}`)) */
+        /* o switchmap evita que os request se subreponham - portanto deve utilizar se */
+        switchMap(searchTerm =>
+          this.restaurantsService
+            .restaurants(searchTerm)
+            .pipe(catchError(error => from([])))
+        )
       )
       .subscribe(restaurants => (this.restaurants = restaurants));
 
